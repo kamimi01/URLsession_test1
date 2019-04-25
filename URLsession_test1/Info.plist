@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>import UIKit
+import SVProgressHUD //使用目的：エラーのポップアップを表示するため
+
+class ViewController: UIViewController {
+    //buttonとソースコードを接続
+    @IBAction func button(_ sender: Any) {
+        //外部サイトを表示するための定義
+        let url = URL(string:&quot;https://retty.me/area/PRE13/ARE15/SUB1501/LCAT1/CAT350/&quot;)
+        let request = URLRequest(url: url!)
+        
+        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+            DispatchQueue.main.sync {
+                if let error = error{
+                    // URLエラー(スキーマ不正、相手ホスト名不正)
+                    print(&quot;URLが不正です！&quot;)
+                    print(error.localizedDescription)
+                    SVProgressHUD.showError(withStatus: &quot;URLが不正です！&quot;)
+                } else {
+                    // 指定URLで接続できるのでURLは正しい
+                    if UIApplication.shared.canOpenURL(url!) == true {
+                        // URLは正しく、safariも起動可能
+                        print(&quot;URLは正しく、safariも起動可能&quot;)
+                        UIApplication.shared.open(url!, options: [:], completionHandler:nil)
+                    } else {
+                        // URLは正しいが、safariが起動不可にされている
+                        print(&quot;URLは正しいが、safariが起動不可&quot;)
+                        SVProgressHUD.showError(withStatus: &quot;safariが無効です！&quot;)
+                    }
+                }
+            }
+            }
+            task.resume()
+        
+        //overrideを削除
+        func viewDidLoad() {
+            super.viewDidLoad()
+            // Do any additional setup after loading the view.
+            
+        }
+        
+        
+    }
+</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>http</string>
+		<string>https</string>
+	</array>
+</dict>
+</plist>
